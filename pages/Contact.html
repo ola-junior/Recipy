@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Recipy</title>
+    <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+    <style>
+        /* Main Color Scheme */
+        :root {
+            --primary-orange: #FF8C42;
+            --secondary-blue: #4A9C6D;
+            --light-orange: #FFB347;
+            --light-blue: #7FB3D5;
+            --dark-orange: #E67300;
+            --dark-blue: #2A5A3B;
+            --white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--primary-orange);
+            font-size: 28px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary-blue);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-orange);
+        }
+
+        /* Contact Page Styles */
+        .contact-hero {
+            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-blue));
+            color: var(--white);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .contact-hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .contact-hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin: 50px auto;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-info h2 {
+            color: var(--secondary-blue);
+            margin-bottom: 20px;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .contact-icon {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .contact-details h3 {
+            margin: 0 0 5px 0;
+            color: var(--dark-gray);
+        }
+
+        .contact-details p {
+            margin: 0;
+            color: var(--dark-gray);
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-form h2 {
+            color: var(--secondary-blue);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-orange);
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--dark-orange);
+        }
+
+        .success-message {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            background-color: var(--dark-gray);
+            color: var(--white);
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            color: var(--white);
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 20px;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 10px;
+            }
+
+            .contact-hero h1 {
+                font-size: 32px;
+            }
+
+            .contact-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="../index.html" class="logo"><span>Recipy</span></a>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="recipes.html">Recipes</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="contact-hero">
+        <div class="container">
+            <h1>Get in Touch</h1>
+            <p>Have questions, suggestions, or feedback about our recipes? We'd love to hear from you! Our team is always ready to assist you with any inquiries.</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Our Location</h3>
+                        <p>123 Recipe Street, Foodville, FK 12345</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Phone Number</h3>
+                        <p>+234 8033470146</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Email Address</h3>
+                        <p>recipy@gmail.com</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h3>Working Hours</h3>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                        <p>Saturday: 10:00 AM - 4:00 PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h2>Send Us a Message</h2>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                    
+                    <div id="successMessage" class="success-message">
+                        Thank you for your message! We'll get back to you soon.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+            <p>&copy; 2025 Recipy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfz_zUIpfOlE6dC-gNXRpUAxa8htAJukM",
+            authDomain: "recipe-app-ac623.firebaseapp.com",
+            projectId: "recipe-app-ac623",
+            storageBucket: "recipe-app-ac623.appspot.com",
+            messagingSenderId: "416865671762",
+            appId: "1:416865671762:web:4d69c1fe80161d3f8b5d8b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Contact Form Submission
+        const contactForm = document.getElementById('contactForm');
+        const successMessage = document.getElementById('successMessage');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = contactForm.name.value;
+            const email = contactForm.email.value;
+            const subject = contactForm.subject.value;
+            const message = contactForm.message.value;
+            
+            // Create a reference to the messages collection
+            const messagesRef = ref(database, 'messages');
+            
+            // Push a new message to the database
+            const newMessageRef = push(messagesRef);
+            
+            set(newMessageRef, {
+                name: name,
+                email: email,
+                subject: subject,
+                message: message,
+                timestamp: new Date().toISOString()
+            })
+            .then(() => {
+                // Show success message
+                successMessage.style.display = 'block';
+                contactForm.reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            })
+            .catch((error) => {
+                console.error("Error saving message: ", error);
+                alert("There was an error sending your message. Please try again.");
+            });
+        });
+    </script>
+</body>
+</html>

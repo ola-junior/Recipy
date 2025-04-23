@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipy</title>
+  <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <a href="../index.html" class="text-2xl font-bold text-orange-500">Recipy</a>
+      <a href="./profile.html" class="text-gray-600 hover:text-orange-500">
+        <i class="fas fa-arrow-left mr-1"></i> Back to Profile
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Form -->
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        <i class="fas fa-plus-circle text-orange-500 mr-2"></i> Add New Recipe
+      </h1>
+
+      <!-- Recipe Form -->
+      <form id="recipeForm">
+        <!-- Recipe Title -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Recipe Name</label>
+          <input 
+            type="text" 
+            id="recipeName"
+            placeholder="e.g., Creamy Garlic Pasta" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+            required
+          >
+        </div>
+
+        <!-- Cover Image Upload -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Cover Image</label>
+          <div class="flex items-center justify-center w-full">
+            <label class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                <p class="text-sm text-gray-500">Click to upload or drag & drop</p>
+                <p id="imageFileName" class="text-sm text-orange-500 mt-2 hidden"></p>
+              </div>
+              <input type="file" id="coverImage" class="hidden" accept="image/*">
+            </label>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Description</label>
+          <textarea 
+            id="description"
+            placeholder="Tell us about your recipe..." 
+            rows="4"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+          ></textarea>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Ingredients</label>
+          <div class="space-y-2" id="ingredients-list">
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="e.g., 2 cups flour" 
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg ingredient-input"
+              >
+              <button type="button" class="text-red-500 hover:text-red-700" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onclick="addIngredientField()"
+            class="mt-2 text-orange-500 hover:text-orange-700 text-sm font-medium"
+          >
+            <i class="fas fa-plus mr-1"></i> Add Ingredient
+          </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Instructions</label>
+          <div class="space-y-2" id="instructions-list">
+            <div class="flex gap-2">
+              <span class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center mt-2 flex-shrink-0">1</span>
+              <textarea 
+                placeholder="Step 1..." 
+                rows="2"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg instruction-input"
+              ></textarea>
+              <button type="button" class="text-red-500 hover:text-red-700 mt-2" onclick="this.parentElement.remove(); updateStepNumbers()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <button 
+            type="button" 
+            onclick="addInstructionField()"
+            class="mt-2 text-orange-500 hover:text-orange-700 text-sm font-medium"
+          >
+            <i class="fas fa-plus mr-1"></i> Add Step
+          </button>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <!-- Prep Time -->
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Prep Time (mins)</label>
+            <input 
+              type="number" 
+              id="prepTime"
+              placeholder="15" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            >
+          </div>
+          <!-- Cook Time -->
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Cook Time (mins)</label>
+            <input 
+              type="number" 
+              id="cookTime"
+              placeholder="30" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            >
+          </div>
+          <!-- Servings -->
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Servings</label>
+            <input 
+              type="number" 
+              id="servings"
+              placeholder="4" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            >
+          </div>
+          <!-- Difficulty -->
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Difficulty</label>
+            <select id="difficulty" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Tags</label>
+          <div class="flex flex-wrap gap-2 mb-2" id="tags-container">
+            <!-- Tags will be added here dynamically -->
+          </div>
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="tagInput"
+              placeholder="Add a tag (e.g., Vegan)" 
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg"
+            >
+            <button type="button" id="addTagBtn" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
+              Add
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end gap-3">
+          <button type="button" class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
+            <i class="fas fa-save mr-1"></i> Publish Recipe
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script type="module" src="../js/addrecipe.js"></script>
+</body>
+</html>

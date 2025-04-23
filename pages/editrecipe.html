@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Recipy</title>
+    <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="../index.html" class="text-xl font-bold text-amber-600">Recipy</a>
+            <div class="flex items-center space-x-4">
+                <a href="../pages/addrecipe.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-amber-600">
+                    <i class="fas fa-plus mr-1"></i> Add Recipe
+                </a>
+                <!-- Profile dropdown -->
+                <div class="relative group">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="w-10 h-10 rounded-full cursor-pointer">
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 hidden group-hover:block">
+                        <div class="py-1">
+                            <a href="../pages/profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i> My Profile
+                            </a>
+                            <a href="../pages/editprofile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-edit mr-2"></i> Edit Profile
+                            </a>
+                            <div class="border-t border-gray-100"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Edit Recipe</h1>
+            <button onclick="window.history.back()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">
+                <i class="fas fa-arrow-left mr-2"></i> Back
+            </button>
+        </div>
+        
+        <form id="recipeForm" class="space-y-6">
+            <!-- Recipe Image -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Cover Image</label>
+                <div class="flex items-center gap-4">
+                    <label class="cursor-pointer">
+                        <span class="px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <i class="fas fa-upload mr-2"></i> Upload Image
+                        </span>
+                        <input id="coverImage" type="file" accept="image/*" class="sr-only">
+                    </label>
+                    <span id="imageFileName" class="text-sm text-gray-500 hidden"></span>
+                </div>
+                <div id="imagePlaceholder" class="mt-2 w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg">
+                    <i class="fas fa-utensils text-gray-400 text-4xl"></i>
+                </div>
+                <img id="imagePreview" src="" alt="Preview" class="mt-2 max-h-48 rounded-lg hidden">
+                <p class="mt-1 text-sm text-gray-500">Upload a high-quality image of your recipe (optional)</p>
+            </div>
+
+            <!-- Basic Info -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label for="recipeName" class="block text-sm font-medium text-gray-700">Recipe Name</label>
+                    <input type="text" id="recipeName" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Short Description</label>
+                    <input type="text" id="description" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                </div>
+            </div>
+
+            <!-- Recipe Details -->
+            <div class="grid md:grid-cols-4 gap-4">
+                <div>
+                    <label for="prepTime" class="block text-sm font-medium text-gray-700">Prep Time (min)</label>
+                    <input type="number" id="prepTime" min="0" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label for="cookTime" class="block text-sm font-medium text-gray-700">Cook Time (min)</label>
+                    <input type="number" id="cookTime" min="0" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label for="servings" class="block text-sm font-medium text-gray-700">Servings</label>
+                    <input type="number" id="servings" min="1" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                </div>
+                <div>
+                    <label for="difficulty" class="block text-sm font-medium text-gray-700">Difficulty</label>
+                    <select id="difficulty" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Ingredients</label>
+                    <button type="button" onclick="addIngredientField()" class="text-sm text-amber-600 hover:text-amber-800">
+                        <i class="fas fa-plus mr-1"></i> Add Ingredient
+                    </button>
+                </div>
+                <div id="ingredients-list" class="space-y-2">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Instructions</label>
+                    <button type="button" onclick="addInstructionField()" class="text-sm text-amber-600 hover:text-amber-800">
+                        <i class="fas fa-plus mr-1"></i> Add Step
+                    </button>
+                </div>
+                <div id="instructions-list" class="space-y-4">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Tags</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="tagInput" placeholder="e.g., Italian" class="text-sm px-3 py-1 border border-gray-300 rounded-md focus:ring-amber-500 focus:border-amber-500">
+                        <button type="button" id="addTagBtn" class="text-sm px-3 py-1 bg-amber-100 text-amber-800 rounded-md hover:bg-amber-200">
+                            Add
+                        </button>
+                    </div>
+                </div>
+                <div id="tags-container" class="flex flex-wrap gap-2">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                <button type="button" onclick="window.history.back()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700">
+                    <i class="fas fa-save mr-2"></i> Update Recipe
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <a href="../index.html" class="text-xl font-bold text-amber-600">RecipeApp</a>
+                    <p class="text-gray-600 mt-1">Share and discover delicious recipes</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-amber-600">About</a>
+                    <a href="#" class="text-gray-600 hover:text-amber-600">Contact</a>
+                    <a href="#" class="text-gray-600 hover:text-amber-600">Privacy</a>
+                    <a href="#" class="text-gray-600 hover:text-amber-600">Terms</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t text-center text-gray-500 text-sm">
+                &copy; 2023 RecipeApp. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../js/editrecipe.js"></script>
+    <script>
+        // Client-side functions for dynamic fields
+        function addIngredientField(value = '') {
+            const list = document.getElementById('ingredients-list');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2';
+            div.innerHTML = `
+                <input type="text" value="${value}" placeholder="e.g., 1 tbsp olive oil" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg ingredient-input">
+                <button type="button" class="text-red-500 hover:text-red-700" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>`;
+            list.appendChild(div);
+        }
+
+        function addInstructionField(value = '') {
+            const list = document.getElementById('instructions-list');
+            const count = list.children.length + 1;
+            const div = document.createElement('div');
+            div.className = 'flex gap-2';
+            div.innerHTML = `
+                <span class="bg-amber-600 text-white rounded-full w-6 h-6 flex items-center justify-center mt-2 flex-shrink-0">${count}</span>
+                <textarea placeholder="Step ${count}..." rows="2" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg instruction-input">${value}</textarea>
+                <button type="button" class="text-red-500 hover:text-red-700 mt-2" onclick="this.parentElement.remove(); updateStepNumbers()">
+                    <i class="fas fa-times"></i>
+                </button>`;
+            list.appendChild(div);
+        }
+
+        function updateStepNumbers() {
+            const steps = document.querySelectorAll('#instructions-list div');
+            steps.forEach((step, index) => {
+                const span = step.querySelector('span');
+                const textarea = step.querySelector('textarea');
+                if (span) span.textContent = index + 1;
+                if (textarea) textarea.placeholder = `Step ${index + 1}...`;
+            });
+        }
+
+        function addTag(tag) {
+            const tagsContainer = document.getElementById('tags-container');
+            const tagElement = document.createElement('span');
+            tagElement.className = 'bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm flex items-center';
+            tagElement.dataset.tag = tag;
+            tagElement.innerHTML = `
+                ${tag}
+                <button class="ml-1 text-orange-500 hover:text-orange-700" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times text-xs"></i>
+                </button>`;
+            tagsContainer.appendChild(tagElement);
+        }
+
+        // Image preview
+        document.getElementById('coverImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('imagePreview').src = event.target.result;
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                    document.getElementById('imagePlaceholder').classList.add('hidden');
+                    document.getElementById('imageFileName').textContent = file.name;
+                    document.getElementById('imageFileName').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Add tag button
+        document.getElementById('addTagBtn').addEventListener('click', function() {
+            const tagInput = document.getElementById('tagInput');
+            const tag = tagInput.value.trim();
+            if (tag) {
+                addTag(tag);
+                tagInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

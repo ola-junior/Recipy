@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipy</title>
+    <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+    
+    <style>
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f9f9f7;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        h1 {
+            color: #2a5a3b;
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        
+        h2 {
+            margin: 25px 0 15px;
+            color: #2a5a3b;
+        }
+        
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        #search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        #search-input:focus {
+            outline: none;
+            border-color: #4a9c6d;
+            box-shadow: 0 0 8px rgba(74, 156, 109, 0.3);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .category-tab {
+            padding: 8px 16px;
+            background-color: #e9e9e9;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .category-tab.active {
+            background-color: #4a9c6d;
+            color: white;
+        }
+        
+        .filter-dropdown {
+            position: relative;
+        }
+        
+        .filter-button {
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        
+        .dropdown-content label {
+            display: block;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        
+        .dropdown-content label:hover {
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        /* Active Filters */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .active-filter {
+            background-color: #e0f0e7;
+            color: #2a5a3b;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-filter {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .clear-filters {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 15px;
+        }
+        
+        /* Recipe Grid */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .recipe-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .recipe-image {
+            height: 200px;
+            background-color: #eee;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .recipe-content {
+            padding: 20px;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .recipe-cuisine {
+            font-weight: bold;
+            color: #4a9c6d;
+        }
+        
+        .recipe-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .recipe-title {
+            margin: 10px 0;
+            font-size: 1.4rem;
+            color: #222;
+        }
+        
+        .recipe-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .recipe-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .recipe-rating {
+            color: #ffb400;
+            font-weight: bold;
+        }
+        
+        .recipe-reviews {
+            color: #888;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+        
+        .view-recipe {
+            background: none;
+            border: none;
+            color: #4a9c6d;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        
+        .view-recipe:hover {
+            background-color: #f0f7f3;
+        }
+        
+        /* Badges */
+        .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ff4757;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .vegetarian {
+            background-color: #4a9c6d;
+        }
+        
+        .vegan {
+            background-color: #2e8b57;
+        }
+        
+        .gluten-free {
+            background-color: #4169e1;
+        }
+        
+        .spicy {
+            background-color: #ff6347;
+        }
+        
+        .quick {
+            background-color: #9370db;
+        }
+        
+        /* Like Button */
+        .like-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #FFA500;
+        }
+        
+        .like-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.1);
+        }
+        
+        .like-btn.liked {
+            color: #FF4500;
+            animation: heartBeat 0.5s;
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(0.9); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .like-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* No Results */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .category-tabs {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CURATED RECIPE COLLECTION</h1>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search recipes by name, ingredient, or cuisine...">
+            <span class="search-icon">🔍</span>
+        </div>
+    </header>
+    
+    <div class="filter-section">
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="all">All</div>
+            <div class="category-tab" data-category="italian">Italian</div>
+            <div class="category-tab" data-category="asian">Asian</div>
+            <div class="category-tab" data-category="mexican">Mexican</div>
+            <div class="category-tab" data-category="mediterranean">Mediterranean</div>
+            <div class="category-tab" data-category="american">American</div>
+            <div class="category-tab" data-category="indian">Indian</div>
+            <div class="category-tab" data-category="french">French</div>
+        </div>
+        
+        <div class="filter-dropdown">
+            <button class="filter-button" id="dietary-filter">Dietary ⏷</button>
+            <div class="dropdown-content" id="dietary-options">
+                <label><input type="checkbox" value="vegetarian"> Vegetarian</label>
+                <label><input type="checkbox" value="vegan"> Vegan</label>
+                <label><input type="checkbox" value="gluten-free"> Gluten-Free</label>
+            </div>
+        </div>
+        
+        <div class="filter-dropdown">
+            <button class="filter-button" id="tags-filter">Tags ⏷</button>
+            <div class="dropdown-content" id="tags-options">
+                <label><input type="checkbox" value="quick"> Quick Meals (<30 mins)</label>
+                <label><input type="checkbox" value="comfort"> Comfort Food</label>
+                <label><input type="checkbox" value="healthy"> Healthy</label>
+                <label><input type="checkbox" value="spicy"> Spicy</label>
+                <label><input type="checkbox" value="dessert"> Desserts</label>
+            </div>
+        </div>
+        
+        <button class="clear-filters" id="clear-filters">Clear all filters</button>
+    </div>
+    
+    <div class="active-filters" id="active-filters"></div>
+    
+    <h2>Featured Recipes</h2>
+    
+    <div class="recipe-grid" id="recipe-container">
+        <!-- Recipes will be dynamically inserted here -->
+    </div>
+
+    <!-- Heart icon SVG for like button -->
+    <svg style="display: none;">
+        <symbol id="heart-icon" viewBox="0 0 24 24">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </symbol>
+    </svg>
+
+    <script>
+        // Recipe Data (60 recipes)
+        const recipes = [
+            // Italian (8 recipes)
+            {
+                id: 1,
+                title: "Pasta Carbonara",
+                cuisine: "Italian",
+                time: "25 mins",
+                description: "Classic Italian pasta with eggs, cheese, pancetta, and black pepper.",
+                rating: 4.9,
+                reviews: 218,
+                tags: ["Featured", "Comfort Food"],
+                dietary: [],
+                ingredients: ["pasta", "eggs", "pecorino cheese", "pancetta", "black pepper"],
+                image:"https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 2,
+                title: "Margherita Pizza",
+                cuisine: "Italian",
+                time: "40 mins",
+                description: "Simple and delicious pizza with tomato sauce, fresh mozzarella, and basil.",
+                rating: 4.8,
+                reviews: 312,
+                tags: ["Vegetarian", "Classic"],
+                dietary: ["vegetarian"],
+                ingredients: ["pizza dough", "tomato sauce", "mozzarella", "basil", "olive oil"],
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 3,
+                title: "Risotto al Funghi",
+                cuisine: "Italian",
+                time: "35 mins",
+                description: "Creamy risotto with wild mushrooms, white wine, and parmesan cheese.",
+                rating: 4.7,
+                reviews: 178,
+                tags: ["Vegetarian", "Comfort Food"],
+                dietary: ["vegetarian"],
+                ingredients: ["arborio rice", "mushrooms", "white wine", "parmesan", "vegetable broth"],
+                image: "https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 4,
+                title: "Tiramisu",
+                cuisine: "Italian",
+                time: "45 mins",
+                description: "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cream.",
+                rating: 4.9,
+                reviews: 256,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["ladyfingers", "espresso", "mascarpone", "eggs", "cocoa powder"],
+                image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 5,
+                title: "Bruschetta",
+                cuisine: "Italian",
+                time: "15 mins",
+                description: "Toasted bread topped with tomatoes, garlic, and fresh basil.",
+                rating: 4.7,
+                reviews: 187,
+                tags: ["Vegetarian", "Appetizer", "Quick"],
+                dietary: ["vegetarian"],
+                ingredients: ["bread", "tomatoes", "garlic", "basil", "olive oil"],
+                image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 6,
+                title: "Minestrone Soup",
+                cuisine: "Italian",
+                time: "45 mins",
+                description: "Hearty vegetable soup with pasta and beans.",
+                rating: 4.6,
+                reviews: 156,
+                tags: ["Vegetarian", "Vegan", "Healthy"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["vegetables", "beans", "pasta", "tomatoes", "vegetable broth"],
+                image: "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 7,
+                title: "Osso Buco",
+                cuisine: "Italian",
+                time: "2 hrs",
+                description: "Braised veal shanks with gremolata and risotto.",
+                rating: 4.8,
+                reviews: 143,
+                tags: ["Comfort Food"],
+                dietary: [],
+                ingredients: ["veal shanks", "white wine", "stock", "carrots", "onions", "risotto"],
+                image: "https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 8,
+                title: "Panna Cotta",
+                cuisine: "Italian",
+                time: "4 hrs",
+                description: "Creamy custard dessert with berry coulis.",
+                rating: 4.7,
+                reviews: 132,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["cream", "sugar", "vanilla", "gelatin", "berries"],
+                image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // Asian (8 recipes)
+            {
+                id: 9,
+                title: "Vegetable Stir Fry",
+                cuisine: "Asian",
+                time: "20 mins",
+                description: "Colorful vegetables with a savory sauce served over rice.",
+                rating: 4.7,
+                reviews: 156,
+                tags: ["Popular", "Vegetarian", "Quick", "Healthy"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["bell peppers", "broccoli", "carrots", "soy sauce", "ginger", "rice"],
+                image: "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 10,
+                title: "Chicken Pad Thai",
+                cuisine: "Asian",
+                time: "30 mins",
+                description: "Classic Thai stir-fried noodles with chicken, peanuts, and tangy sauce.",
+                rating: 4.8,
+                reviews: 289,
+                tags: ["Popular", "Spicy"],
+                dietary: [],
+                ingredients: ["rice noodles", "chicken", "eggs", "bean sprouts", "peanuts", "tamarind"],
+                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 11,
+                title: "Beef Bulgogi",
+                cuisine: "Asian",
+                time: "40 mins",
+                description: "Korean marinated beef grilled to perfection, served with rice and vegetables.",
+                rating: 4.8,
+                reviews: 201,
+                tags: [],
+                dietary: ["gluten-free"],
+                ingredients: ["beef", "soy sauce", "pear", "sesame oil", "garlic", "rice"],
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 12,
+                title: "Vegetable Sushi Rolls",
+                cuisine: "Asian",
+                time: "50 mins",
+                description: "Homemade sushi rolls with avocado, cucumber, and carrot.",
+                rating: 4.6,
+                reviews: 187,
+                tags: ["Vegetarian", "Healthy"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["sushi rice", "nori", "avocado", "cucumber", "carrot", "rice vinegar"],
+                image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 13,
+                title: "Chicken Teriyaki",
+                cuisine: "Asian",
+                time: "30 mins",
+                description: "Grilled chicken glazed with sweet teriyaki sauce, served with rice.",
+                rating: 4.7,
+                reviews: 234,
+                tags: [],
+                dietary: ["gluten-free"],
+                ingredients: ["chicken", "soy sauce", "mirin", "sugar", "ginger", "rice"],
+                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 14,
+                title: "Beef Pho",
+                cuisine: "Asian",
+                time: "2 hrs",
+                description: "Vietnamese noodle soup with aromatic broth and tender beef.",
+                rating: 4.8,
+                reviews: 201,
+                tags: ["Comfort Food"],
+                dietary: ["gluten-free"],
+                ingredients: ["beef", "rice noodles", "star anise", "cinnamon", "ginger", "bean sprouts"],
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 15,
+                title: "Pork Dumplings",
+                cuisine: "Asian",
+                time: "45 mins",
+                description: "Steamed dumplings with pork and vegetable filling.",
+                rating: 4.8,
+                reviews: 178,
+                tags: ["Comfort Food"],
+                dietary: [],
+                ingredients: ["pork", "dumpling wrappers", "cabbage", "ginger", "soy sauce"],
+                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 16,
+                title: "Miso Soup",
+                cuisine: "Asian",
+                time: "15 mins",
+                description: "Traditional Japanese soup with tofu and seaweed.",
+                rating: 4.6,
+                reviews: 165,
+                tags: ["Vegetarian", "Vegan", "Healthy", "Quick"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["miso paste", "tofu", "seaweed", "green onions", "dashi"],
+                image: "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // Mexican (8 recipes)
+            {
+                id: 17,
+                title: "Chicken Tacos",
+                cuisine: "Mexican",
+                time: "25 mins",
+                description: "Spicy chicken tacos with fresh salsa, avocado, and lime crema.",
+                rating: 4.7,
+                reviews: 234,
+                tags: ["Quick", "Spicy"],
+                dietary: ["gluten-free"],
+                ingredients: ["chicken", "taco seasoning", "corn tortillas", "avocado", "lime", "cilantro"],
+                image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 18,
+                title: "Vegetable Enchiladas",
+                cuisine: "Mexican",
+                time: "45 mins",
+                description: "Cheesy enchiladas stuffed with roasted vegetables and smothered in sauce.",
+                rating: 4.6,
+                reviews: 178,
+                tags: ["Vegetarian", "Comfort Food"],
+                dietary: ["vegetarian"],
+                ingredients: ["bell peppers", "zucchini", "corn", "black beans", "cheese", "enchilada sauce"],
+                image: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 19,
+                title: "Guacamole",
+                cuisine: "Mexican",
+                time: "10 mins",
+                description: "Fresh avocado dip with tomatoes, onion, cilantro, and lime.",
+                rating: 4.9,
+                reviews: 321,
+                tags: ["Quick", "Vegetarian", "Vegan", "Healthy"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["avocado", "tomato", "onion", "cilantro", "lime", "jalapeño"],
+                image: "https://images.unsplash.com/photo-1533050487297-09b450131914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 20,
+                title: "Churros",
+                cuisine: "Mexican",
+                time: "30 mins",
+                description: "Crispy fried dough pastries dusted with cinnamon sugar.",
+                rating: 4.8,
+                reviews: 198,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["flour", "water", "butter", "eggs", "sugar", "cinnamon"],
+                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 21,
+                title: "Chicken Quesadillas",
+                cuisine: "Mexican",
+                time: "20 mins",
+                description: "Crispy tortillas filled with cheese and spiced chicken.",
+                rating: 4.7,
+                reviews: 187,
+                tags: ["Quick"],
+                dietary: [],
+                ingredients: ["chicken", "tortillas", "cheese", "bell peppers", "spices"],
+                image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 22,
+                title: "Chicken Fajitas",
+                cuisine: "Mexican",
+                time: "30 mins",
+                description: "Sizzling chicken with bell peppers and onions, served with tortillas.",
+                rating: 4.8,
+                reviews: 213,
+                tags: [],
+                dietary: ["gluten-free"],
+                ingredients: ["chicken", "bell peppers", "onion", "tortillas", "lime", "spices"],
+                image: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 23,
+                title: "Pozole",
+                cuisine: "Mexican",
+                time: "3 hrs",
+                description: "Traditional hominy soup with pork and red chiles.",
+                rating: 4.8,
+                reviews: 156,
+                tags: ["Comfort Food"],
+                dietary: ["gluten-free"],
+                ingredients: ["pork", "hominy", "red chiles", "onion", "garlic", "spices"],
+                image: "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 24,
+                title: "Tres Leches Cake",
+                cuisine: "Mexican",
+                time: "4 hrs",
+                description: "Sponge cake soaked in three kinds of milk.",
+                rating: 4.9,
+                reviews: 187,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["flour", "eggs", "sugar", "evaporated milk", "condensed milk", "cream"],
+                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // Mediterranean (8 recipes)
+            {
+                id: 25,
+                title: "Greek Salad",
+                cuisine: "Mediterranean",
+                time: "15 mins",
+                description: "Fresh vegetables, feta cheese, and olives with olive oil dressing.",
+                rating: 4.8,
+                reviews: 124,
+                tags: ["Featured", "Vegetarian", "Healthy", "Quick"],
+                dietary: ["vegetarian"],
+                ingredients: ["cucumber", "tomato", "red onion", "feta", "olives", "olive oil"],
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 26,
+                title: "Hummus",
+                cuisine: "Mediterranean",
+                time: "10 mins",
+                description: "Creamy chickpea dip with tahini, garlic, and lemon juice.",
+                rating: 4.9,
+                reviews: 287,
+                tags: ["Vegetarian", "Vegan", "Healthy", "Quick"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["chickpeas", "tahini", "garlic", "lemon", "olive oil", "cumin"],
+                image: "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 27,
+                title: "Falafel Wrap",
+                cuisine: "Mediterranean",
+                time: "30 mins",
+                description: "Crispy falafel balls wrapped in pita with tahini sauce and vegetables.",
+                rating: 4.7,
+                reviews: 213,
+                tags: ["Vegetarian", "Vegan"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["chickpeas", "parsley", "garlic", "pita", "tahini", "vegetables"],
+                image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 28,
+                title: "Shakshuka",
+                cuisine: "Mediterranean",
+                time: "30 mins",
+                description: "Eggs poached in a spicy tomato and pepper sauce.",
+                rating: 4.8,
+                reviews: 176,
+                tags: ["Vegetarian", "Healthy", "Spicy"],
+                dietary: ["vegetarian", "gluten-free"],
+                ingredients: ["eggs", "tomatoes", "bell peppers", "onion", "garlic", "paprika"],
+                image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 29,
+                title: "Tabbouleh",
+                cuisine: "Mediterranean",
+                time: "25 mins",
+                description: "Fresh parsley salad with bulgur, tomatoes, and lemon dressing.",
+                rating: 4.7,
+                reviews: 165,
+                tags: ["Vegetarian", "Vegan", "Healthy"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["parsley", "bulgur", "tomatoes", "lemon", "olive oil", "mint"],
+                image: "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 30,
+                title: "Greek Moussaka",
+                cuisine: "Mediterranean",
+                time: "1 hr 30 mins",
+                description: "Layered eggplant dish with spiced meat and béchamel sauce.",
+                rating: 4.8,
+                reviews: 178,
+                tags: ["Comfort Food"],
+                dietary: [],
+                ingredients: ["eggplant", "ground lamb", "tomatoes", "potatoes", "béchamel"],
+                image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 31,
+                title: "Baba Ganoush",
+                cuisine: "Mediterranean",
+                time: "45 mins",
+                description: "Smoky roasted eggplant dip with tahini and lemon.",
+                rating: 4.7,
+                reviews: 143,
+                tags: ["Vegetarian", "Vegan", "Healthy"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["eggplant", "tahini", "lemon", "garlic", "olive oil"],
+                image: "https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 32,
+                title: "Spanakopita",
+                cuisine: "Mediterranean",
+                time: "1 hr",
+                description: "Greek spinach and feta pie with flaky phyllo dough.",
+                rating: 4.8,
+                reviews: 156,
+                tags: ["Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["spinach", "feta", "phyllo dough", "onion", "eggs"],
+                image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // American (8 recipes)
+            {
+                id: 33,
+                title: "Classic Burger",
+                cuisine: "American",
+                time: "25 mins",
+                description: "Juicy beef patty with cheese, lettuce, tomato, and special sauce.",
+                rating: 4.8,
+                reviews: 342,
+                tags: ["Comfort Food", "Popular"],
+                dietary: [],
+                ingredients: ["ground beef", "burger buns", "cheese", "lettuce", "tomato", "pickles"],
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 34,
+                title: "Pancakes",
+                cuisine: "American",
+                time: "20 mins",
+                description: "Fluffy pancakes with maple syrup and butter.",
+                rating: 4.9,
+                reviews: 298,
+                tags: ["Vegetarian", "Breakfast"],
+                dietary: ["vegetarian"],
+                ingredients: ["flour", "milk", "eggs", "butter", "baking powder", "maple syrup"],
+                image: "https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 35,
+                title: "Mac and Cheese",
+                cuisine: "American",
+                time: "35 mins",
+                description: "Creamy macaroni with a blend of cheeses and crispy breadcrumb topping.",
+                rating: 4.7,
+                reviews: 267,
+                tags: ["Vegetarian", "Comfort Food"],
+                dietary: ["vegetarian"],
+                ingredients: ["macaroni", "cheddar", "milk", "butter", "breadcrumbs", "mustard"],
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 36,
+                title: "BBQ Ribs",
+                cuisine: "American",
+                time: "3 hrs",
+                description: "Fall-off-the-bone ribs with homemade BBQ sauce.",
+                rating: 4.9,
+                reviews: 189,
+                tags: [],
+                dietary: ["gluten-free"],
+                ingredients: ["pork ribs", "BBQ sauce", "brown sugar", "paprika", "garlic powder"],
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 37,
+                title: "Fried Chicken",
+                cuisine: "American",
+                time: "45 mins",
+                description: "Crispy buttermilk fried chicken with a golden crust.",
+                rating: 4.9,
+                reviews: 321,
+                tags: ["Comfort Food"],
+                dietary: [],
+                ingredients: ["chicken", "buttermilk", "flour", "spices", "oil"],
+                image: "https://images.unsplash.com/photo-1562967916-eb82221dfb92?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 38,
+                title: "Apple Pie",
+                cuisine: "American",
+                time: "1 hr 15 mins",
+                description: "Classic pie with spiced apple filling and flaky crust.",
+                rating: 4.9,
+                reviews: 287,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["apples", "sugar", "cinnamon", "flour", "butter", "lemon"],
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 39,
+                title: "Clam Chowder",
+                cuisine: "American",
+                time: "1 hr",
+                description: "Creamy New England-style soup with clams and potatoes.",
+                rating: 4.7,
+                reviews: 187,
+                tags: ["Comfort Food"],
+                dietary: [],
+                ingredients: ["clams", "potatoes", "cream", "bacon", "onion", "celery"],
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 40,
+                title: "Cornbread",
+                cuisine: "American",
+                time: "30 mins",
+                description: "Sweet and savory cornbread with honey butter.",
+                rating: 4.8,
+                reviews: 156,
+                tags: ["Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["cornmeal", "flour", "buttermilk", "eggs", "honey"],
+                image: "https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // Indian (8 recipes)
+            {
+                id: 41,
+                title: "Chicken Tikka Masala",
+                cuisine: "Indian",
+                time: "40 mins",
+                description: "Grilled chicken chunks in spiced curry sauce with cream and tomatoes.",
+                rating: 4.8,
+                reviews: 342,
+                tags: ["Editor's Picks", "Spicy"],
+                dietary: ["gluten-free"],
+                ingredients: ["chicken", "yogurt", "tomatoes", "cream", "garam masala", "garlic"],
+                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 42,
+                title: "Vegetable Biryani",
+                cuisine: "Indian",
+                time: "50 mins",
+                description: "Fragrant rice dish with mixed vegetables and aromatic spices.",
+                rating: 4.7,
+                reviews: 231,
+                tags: ["Vegetarian", "Vegan"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["basmati rice", "mixed vegetables", "yogurt", "saffron", "spices"],
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 43,
+                title: "Palak Paneer",
+                cuisine: "Indian",
+                time: "35 mins",
+                description: "Creamy spinach curry with cubes of Indian cottage cheese.",
+                rating: 4.8,
+                reviews: 198,
+                tags: ["Vegetarian", "Healthy"],
+                dietary: ["vegetarian", "gluten-free"],
+                ingredients: ["spinach", "paneer", "cream", "garlic", "ginger", "spices"],
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 44,
+                title: "Gulab Jamun",
+                cuisine: "Indian",
+                time: "45 mins",
+                description: "Sweet fried dough balls soaked in rose-flavored syrup.",
+                rating: 4.9,
+                reviews: 176,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["milk powder", "flour", "ghee", "sugar", "rose water", "cardamom"],
+                image:  "https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 45,
+                title: "Butter Chicken",
+                cuisine: "Indian",
+                time: "45 mins",
+                description: "Tender chicken in rich tomato and butter sauce.",
+                rating: 4.9,
+                reviews: 298,
+                tags: ["Popular"],
+                dietary: ["gluten-free"],
+                ingredients: ["chicken", "tomatoes", "cream", "butter", "garam masala"],
+                image:  "https://images.unsplash.com/photo-1562967916-eb82221dfb92?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 46,
+                title: "Samosa",
+                cuisine: "Indian",
+                time: "50 mins",
+                description: "Crispy pastry filled with spiced potatoes and peas.",
+                rating: 4.8,
+                reviews: 245,
+                tags: ["Vegetarian", "Appetizer"],
+                dietary: ["vegetarian"],
+                ingredients: ["potatoes", "peas", "flour", "spices", "oil"],
+                image: "https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 47,
+                title: "Chana Masala",
+                cuisine: "Indian",
+                time: "40 mins",
+                description: "Spicy chickpea curry with tomatoes and onions.",
+                rating: 4.7,
+                reviews: 187,
+                tags: ["Vegetarian", "Vegan", "Healthy"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["chickpeas", "tomatoes", "onion", "garlic", "ginger", "spices"],
+                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 48,
+                title: "Naan Bread",
+                cuisine: "Indian",
+                time: "2 hrs",
+                description: "Soft and fluffy leavened flatbread.",
+                rating: 4.8,
+                reviews: 156,
+                tags: ["Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["flour", "yogurt", "yeast", "sugar", "ghee"],
+                image: "https://images.unsplash.com/photo-1554520735-0a6b8b6ce8b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // French (8 recipes)
+            {
+                id: 49,
+                title: "Beef Bourguignon",
+                cuisine: "French",
+                time: "3 hrs",
+                description: "Slow-cooked beef in red wine with mushrooms, onions, and bacon.",
+                rating: 4.9,
+                reviews: 187,
+                tags: ["Classic", "Comfort Food"],
+                dietary: ["gluten-free"],
+                ingredients: ["beef", "red wine", "mushrooms", "pearl onions", "bacon", "carrots"],
+                image: "https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 50,
+                title: "Ratatouille",
+                cuisine: "French",
+                time: "1 hr",
+                description: "Provençal stewed vegetables with herbs and olive oil.",
+                rating: 4.7,
+                reviews: 156,
+                tags: ["Vegetarian", "Vegan", "Healthy"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["eggplant", "zucchini", "bell peppers", "tomatoes", "herbs", "olive oil"],
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 51,
+                title: "Croque Monsieur",
+                cuisine: "French",
+                time: "20 mins",
+                description: "Grilled ham and cheese sandwich with béchamel sauce.",
+                rating: 4.8,
+                reviews: 201,
+                tags: ["Quick", "Comfort Food"],
+                dietary: [],
+                ingredients: ["bread", "ham", "gruyere", "butter", "milk", "flour"],
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 52,
+                title: "Crème Brûlée",
+                cuisine: "French",
+                time: "1 hr",
+                description: "Rich custard topped with a layer of hardened caramelized sugar.",
+                rating: 4.9,
+                reviews: 243,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["cream", "egg yolks", "sugar", "vanilla"],
+                image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 53,
+                title: "Quiche Lorraine",
+                cuisine: "French",
+                time: "1 hr",
+                description: "Savory pie with bacon, cheese, and custard filling.",
+                rating: 4.8,
+                reviews: 187,
+                tags: ["Breakfast", "Brunch"],
+                dietary: [],
+                ingredients: ["pie crust", "bacon", "eggs", "cream", "cheese"],
+                image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 54,
+                title: "French Onion Soup",
+                cuisine: "French",
+                time: "1 hr 15 mins",
+                description: "Caramelized onion soup with bread and melted cheese topping.",
+                rating: 4.7,
+                reviews: 176,
+                tags: ["Vegetarian", "Comfort Food"],
+                dietary: ["vegetarian"],
+                ingredients: ["onions", "beef broth", "bread", "cheese", "butter"],
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 55,
+                title: "Coq au Vin",
+                cuisine: "French",
+                time: "2 hrs",
+                description: "Chicken braised with wine, mushrooms, and bacon.",
+                rating: 4.8,
+                reviews: 165,
+                tags: ["Comfort Food"],
+                dietary: ["gluten-free"],
+                ingredients: ["chicken", "red wine", "mushrooms", "bacon", "pearl onions"],
+                image: "https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 56,
+                title: "Tarte Tatin",
+                cuisine: "French",
+                time: "1 hr 30 mins",
+                description: "Upside-down caramelized apple tart.",
+                rating: 4.8,
+                reviews: 143,
+                tags: ["Dessert", "Vegetarian"],
+                dietary: ["vegetarian"],
+                ingredients: ["apples", "sugar", "butter", "puff pastry"],
+                image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+
+            // Breakfast (4 recipes)
+            {
+                id: 57,
+                title: "Avocado Toast",
+                cuisine: "American",
+                time: "10 mins",
+                description: "Smashed avocado on toasted bread with optional toppings like eggs or tomatoes.",
+                rating: 4.6,
+                reviews: 278,
+                tags: ["Newest", "Breakfast", "Healthy", "Vegetarian", "Quick"],
+                dietary: ["vegetarian", "vegan"],
+                ingredients: ["avocado", "bread", "lemon", "salt", "pepper", "eggs"],
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 58,
+                title: "French Toast",
+                cuisine: "American",
+                time: "15 mins",
+                description: "Bread soaked in eggs and milk, then fried to golden perfection.",
+                rating: 4.7,
+                reviews: 198,
+                tags: ["Vegetarian", "Breakfast", "Comfort Food"],
+                dietary: ["vegetarian"],
+                ingredients: ["bread", "eggs", "milk", "cinnamon", "vanilla", "butter"],
+                image: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 59,
+                title: "Smoothie Bowl",
+                cuisine: "American",
+                time: "10 mins",
+                description: "Thick smoothie topped with fresh fruits, nuts, and seeds.",
+                rating: 4.6,
+                reviews: 176,
+                tags: ["Vegetarian", "Vegan", "Healthy", "Breakfast", "Quick"],
+                dietary: ["vegetarian", "vegan", "gluten-free"],
+                ingredients: ["banana", "berries", "yogurt", "granola", "nuts", "honey"],
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                id: 60,
+                title: "Breakfast Burrito",
+                cuisine: "Mexican",
+                time: "20 mins",
+                description: "Scrambled eggs, cheese, and veggies wrapped in a tortilla.",
+                rating: 4.7,
+                reviews: 187,
+                tags: ["Breakfast", "Quick"],
+                dietary: ["vegetarian"],
+                ingredients: ["tortillas", "eggs", "cheese", "bell peppers", "avocado", "salsa"],
+                image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            }
+        ];
+
+        // Current filters
+        let currentFilters = {
+            category: 'all',
+            dietary: [],
+            tags: []
+        };
+
+        // Liked recipes (stored in localStorage)
+        let likedRecipes = JSON.parse(localStorage.getItem('likedRecipes')) || [];
+
+        // DOM Elements
+        const recipeContainer = document.getElementById('recipe-container');
+        const searchInput = document.getElementById('search-input');
+        const activeFiltersContainer = document.getElementById('active-filters');
+        const clearFiltersBtn = document.getElementById('clear-filters');
+
+        // Initialize the app
+        function init() {
+            renderRecipes(recipes);
+            setupEventListeners();
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Search functionality
+            searchInput.addEventListener('input', handleSearch);
+            
+            // Category tabs
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', handleCategoryChange);
+            });
+            
+            // Dietary filter dropdown
+            document.getElementById('dietary-filter').addEventListener('click', toggleDropdown.bind(null, 'dietary-options'));
+            document.querySelectorAll('#dietary-options input').forEach(checkbox => {
+                checkbox.addEventListener('change', handleDietaryFilter);
+            });
+            
+            // Tags filter dropdown
+            document.getElementById('tags-filter').addEventListener('click', toggleDropdown.bind(null, 'tags-options'));
+            document.querySelectorAll('#tags-options input').forEach(checkbox => {
+                checkbox.addEventListener('change', handleTagsFilter);
+            });
+            
+            // Clear all filters
+            clearFiltersBtn.addEventListener('click', clearAllFilters);
+            
+            // Remove individual filters
+            activeFiltersContainer.addEventListener('click', handleRemoveFilter);
+            
+            // Close dropdowns when clicking outside
+            window.addEventListener('click', closeDropdowns);
+        }
+
+        // Render recipes based on current filters
+        function renderRecipes(recipesToRender) {
+            recipeContainer.innerHTML = '';
+            
+            if (recipesToRender.length === 0) {
+                recipeContainer.innerHTML = '<div class="no-results">No recipes found matching your search.</div>';
+                return;
+            }
+            
+            recipesToRender.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                
+                // Determine badges to show
+                const badge = getRecipeBadge(recipe);
+                const dietaryBadges = getDietaryBadges(recipe);
+                const isLiked = likedRecipes.includes(recipe.id);
+                
+                card.innerHTML = `
+                    <div class="recipe-image" style="background-image: url('${recipe.image}')">
+                        ${badge}
+                        ${dietaryBadges}
+                        <button class="like-btn ${isLiked ? 'liked' : ''}" data-recipe-id="${recipe.id}">
+                            <svg>
+                                <use xlink:href="#heart-icon" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="recipe-content">
+                        <div class="recipe-meta">
+                            <span class="recipe-cuisine">${recipe.cuisine}</span>
+                            <span class="recipe-time">⏱️ ${recipe.time}</span>
+                        </div>
+                        <h3 class="recipe-title">${recipe.title}</h3>
+                        <p class="recipe-description">${recipe.description}</p>
+                        <div class="recipe-footer">
+                            <div>
+                                <span class="recipe-rating">★ ${recipe.rating}</span>
+                                <span class="recipe-reviews">(${recipe.reviews})</span>
+                            </div>
+                            <button class="view-recipe">View Recipe ▶</button>
+                        </div>
+                    </div>
+                `;
+                
+                recipeContainer.appendChild(card);
+            });
+            
+            // Add event listeners to like buttons
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', handleLikeClick);
+            });
+        }
+
+        // Get recipe badge based on tags
+        function getRecipeBadge(recipe) {
+            if (recipe.tags.includes('Featured')) {
+                return `<div class="badge">Featured</div>`;
+            } else if (recipe.tags.includes('Popular')) {
+                return `<div class="badge">Popular</div>`;
+            } else if (recipe.tags.includes('Newest')) {
+                return `<div class="badge">New</div>`;
+            } else if (recipe.tags.includes("Editor's Picks")) {
+                return `<div class="badge">Editor's Pick</div>`;
+            }
+            return '';
+        }
+
+        // Get dietary badges for a recipe
+        function getDietaryBadges(recipe) {
+            let badges = '';
+            if (recipe.dietary.includes('vegetarian')) {
+                badges += `<div class="badge vegetarian" style="left: auto; right: 10px;">Vegetarian</div>`;
+            }
+            if (recipe.dietary.includes('vegan')) {
+                badges += `<div class="badge vegan" style="left: auto; right: 10px; top: 40px;">Vegan</div>`;
+            }
+            if (recipe.dietary.includes('gluten-free')) {
+                const topPosition = recipe.dietary.includes('vegetarian') && recipe.dietary.includes('vegan') ? '70px' : '40px';
+                badges += `<div class="badge gluten-free" style="left: auto; right: 10px; top: ${topPosition};">Gluten-Free</div>`;
+            }
+            return badges;
+        }
+
+        // Filter recipes based on current filters
+        function filterRecipes() {
+            let filteredRecipes = [...recipes];
+            
+            // Filter by category
+            if (currentFilters.category !== 'all') {
+                filteredRecipes = filteredRecipes.filter(recipe => 
+                    recipe.cuisine.toLowerCase() === currentFilters.category
+                );
+            }
+            
+            // Filter by dietary
+            if (currentFilters.dietary.length > 0) {
+                filteredRecipes = filteredRecipes.filter(recipe => 
+                    currentFilters.dietary.every(diet => recipe.dietary.includes(diet))
+                );
+            }
+            
+            // Filter by tags
+            if (currentFilters.tags.length > 0) {
+                filteredRecipes = filteredRecipes.filter(recipe => 
+                    currentFilters.tags.some(tag => recipe.tags.includes(tag))
+                );
+            }
+            
+            renderRecipes(filteredRecipes);
+            updateActiveFiltersDisplay();
+        }
+
+        // Update active filters display
+        function updateActiveFiltersDisplay() {
+            activeFiltersContainer.innerHTML = '';
+            
+            // Category filter
+            if (currentFilters.category !== 'all') {
+                const filter = document.createElement('div');
+                filter.className = 'active-filter';
+                filter.innerHTML = `
+                    ${currentFilters.category.charAt(0).toUpperCase() + currentFilters.category.slice(1)}
+                    <button class="remove-filter" data-type="category">×</button>
+                `;
+                activeFiltersContainer.appendChild(filter);
+            }
+            
+            // Dietary filters
+            currentFilters.dietary.forEach(diet => {
+                const filter = document.createElement('div');
+                filter.className = 'active-filter';
+                filter.innerHTML = `
+                    ${diet.charAt(0).toUpperCase() + diet.slice(1)}
+                    <button class="remove-filter" data-type="dietary" data-value="${diet}">×</button>
+                `;
+                activeFiltersContainer.appendChild(filter);
+            });
+            
+            // Tag filters
+            currentFilters.tags.forEach(tag => {
+                const filter = document.createElement('div');
+                filter.className = 'active-filter';
+                filter.innerHTML = `
+                    ${tag === 'quick' ? 'Quick Meals' : 
+                      tag === 'comfort' ? 'Comfort Food' : 
+                      tag.charAt(0).toUpperCase() + tag.slice(1)}
+                    <button class="remove-filter" data-type="tags" data-value="${tag}">×</button>
+                `;
+                activeFiltersContainer.appendChild(filter);
+            });
+        }
+
+        // Event Handlers
+        function handleSearch(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm === '') {
+                filterRecipes();
+                return;
+            }
+            
+            const filteredRecipes = recipes.filter(recipe => 
+                recipe.title.toLowerCase().includes(searchTerm) || 
+                recipe.cuisine.toLowerCase().includes(searchTerm) ||
+                recipe.description.toLowerCase().includes(searchTerm) ||
+                recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                recipe.ingredients.some(ingredient => ingredient.toLowerCase().includes(searchTerm))
+            );
+            renderRecipes(filteredRecipes);
+        }
+
+        function handleCategoryChange() {
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            currentFilters.category = this.dataset.category;
+            filterRecipes();
+        }
+
+        function toggleDropdown(dropdownId) {
+            document.getElementById(dropdownId).classList.toggle('show');
+        }
+
+        function handleDietaryFilter() {
+            if (this.checked) {
+                currentFilters.dietary.push(this.value);
+            } else {
+                currentFilters.dietary = currentFilters.dietary.filter(d => d !== this.value);
+            }
+            filterRecipes();
+        }
+
+        function handleTagsFilter() {
+            if (this.checked) {
+                currentFilters.tags.push(this.value);
+            } else {
+                currentFilters.tags = currentFilters.tags.filter(t => t !== this.value);
+            }
+            filterRecipes();
+        }
+
+        function clearAllFilters() {
+            currentFilters = {
+                category: 'all',
+                dietary: [],
+                tags: []
+            };
+            
+            // Reset UI
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.category-tab[data-category="all"]').classList.add('active');
+            
+            document.querySelectorAll('#dietary-options input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('#tags-options input').forEach(cb => cb.checked = false);
+            
+            filterRecipes();
+        }
+
+        function handleRemoveFilter(e) {
+            if (e.target.classList.contains('remove-filter')) {
+                const type = e.target.dataset.type;
+                const value = e.target.dataset.value;
+                
+                if (type === 'category') {
+                    currentFilters.category = 'all';
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelector('.category-tab[data-category="all"]').classList.add('active');
+                } else if (type === 'dietary') {
+                    currentFilters.dietary = currentFilters.dietary.filter(d => d !== value);
+                    document.querySelector(`#dietary-options input[value="${value}"]`).checked = false;
+                } else if (type === 'tags') {
+                    currentFilters.tags = currentFilters.tags.filter(t => t !== value);
+                    document.querySelector(`#tags-options input[value="${value}"]`).checked = false;
+                }
+                
+                filterRecipes();
+            }
+        }
+
+        function handleLikeClick() {
+            const recipeId = parseInt(this.dataset.recipeId);
+            const index = likedRecipes.indexOf(recipeId);
+            
+            if (index === -1) {
+                // Not liked, add to liked
+                likedRecipes.push(recipeId);
+                this.classList.add('liked');
+                
+                // Add animation effect
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 300);
+            } else {
+                // Already liked, remove from liked
+                likedRecipes.splice(index, 1);
+                this.classList.remove('liked');
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('likedRecipes', JSON.stringify(likedRecipes));
+        }
+
+        function closeDropdowns(e) {
+            if (!e.target.matches('.filter-button')) {
+                const dropdowns = document.querySelectorAll('.dropdown-content');
+                dropdowns.forEach(dropdown => {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipy</title>
+    <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Add Firebase SDK -->
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-xl font-bold text-amber-600">Recipy</a>
+            <div class="flex items-center space-x-4">
+                <a href="addrecipe.html" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-amber-50 hover:text-amber-600">
+                    <i class="fas fa-plus mr-1"></i> Add Recipe
+                </a>
+                <!-- Profile dropdown -->
+                <div class="relative group">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile" class="w-10 h-10 rounded-full cursor-pointer">
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 hidden group-hover:block">
+                        <div class="py-1">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user mr-2"></i> My Profile
+                            </a>
+                            <a href="editprofile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-edit mr-2"></i> Edit Profile
+                            </a>
+                            <div class="border-t border-gray-100"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Recipe View Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Recipe Header -->
+        <div class="mb-8">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 id="recipeTitle" class="text-3xl font-bold text-gray-900">Loading recipe...</h1>
+                    <p id="recipeDescription" class="text-gray-600"></p>
+                </div>
+                <div class="flex space-x-2">
+                    <button class="p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                    <button class="p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Recipe Meta -->
+            <div class="flex flex-wrap gap-4 mb-6 text-sm">
+                <div id="totalTime" class="flex items-center text-gray-700">
+                    <i class="far fa-clock mr-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div id="servings" class="flex items-center text-gray-700">
+                    <i class="fas fa-utensils mr-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div id="difficulty" class="flex items-center text-gray-700">
+                    <i class="fas fa-signal mr-2"></i>
+                    <span>Loading...</span>
+                </div>
+                <div id="rating" class="flex items-center text-gray-700">
+                    <i class="far fa-star mr-2"></i>
+                    <span>Loading...</span>
+                </div>
+            </div>
+            
+            <!-- Recipe Image -->
+            <div class="rounded-xl overflow-hidden shadow-md mb-6">
+                <div id="imagePlaceholder" class="w-full h-96 bg-gray-200 flex items-center justify-center hidden">
+                    <i class="fas fa-utensils text-gray-400 text-4xl"></i>
+                </div>
+                <img id="recipeImage" src="" alt="Recipe Image" class="w-full h-96 object-cover hidden">
+            </div>
+        </div>
+
+        <!-- Recipe Content -->
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Ingredients -->
+            <div class="md:col-span-1">
+                <div class="bg-white p-6 rounded-xl shadow-sm sticky top-4">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-900 border-b pb-2">Ingredients</h2>
+                    <ul id="ingredients-list" class="space-y-3">
+                        <!-- Dynamically populated -->
+                    </ul>
+                    
+                    <div class="mt-6 pt-4 border-t">
+                        <h3 class="font-medium text-gray-900 mb-2">Tags</h3>
+                        <div id="tags-container" class="flex flex-wrap gap-2">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="md:col-span-2">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-900 border-b pb-2">Instructions</h2>
+                    <ol id="instructions-list" class="space-y-6">
+                        <!-- Dynamically populated -->
+                    </ol>
+                </div>
+                
+                <!-- Notes & Tips -->
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-900 border-b pb-2">Chef's Notes</h2>
+                    <div class="prose max-w-none text-gray-700">
+                        <p>Enjoy your meal! Adjust seasoning to taste.</p>
+                    </div>
+                </div>
+                
+                <!-- Author & Actions -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Author" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h3 id="authorName" class="font-medium text-gray-900">Loading...</h3>
+                                <p id="postDate" class="text-sm text-gray-600">Posted on Loading...</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button id="editBtn" class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 flex items-center" 
+                                >
+                                <i class="far fa-edit mr-2"></i> Edit
+                            </button>
+                            <button class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 flex items-center">
+                                <i class="fas fa-print mr-2"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <a href="index.html" class="text-xl font-bold text-amber-600">Recipy</a>
+                    <p class="text-gray-600 mt-1">Share and discover delicious recipes</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-amber-600">About</a>
+                    <a href="#" class="text-gray-600 hover:text-amber-600">Contact</a>
+                    <a href="#" class="text-gray-600 hover:text-amber-600">Privacy</a>
+                    <a href="#" class="text-gray-600 hover:text-amber-600">Terms</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t text-center text-gray-500 text-sm">
+                &copy; 2023 Recipy. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="../js/viewrecipe.js"></script>
+</body>
+</html>

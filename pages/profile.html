@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipy</title>
+  <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Firebase SDK -->
+</head>
+<body class="bg-gray-50">
+  <!-- Main Container -->
+  <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Profile Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+        <!-- Profile Picture -->
+        <div class="relative">
+          <img 
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" 
+            alt="Profile" 
+            class="w-32 h-32 rounded-full object-cover border-4 border-orange-200"
+            id="profileImageDisplay"
+          >
+          <span class="absolute bottom-0 right-0 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PRO</span>
+        </div>
+        <!-- User Info -->
+        <div class="flex-1 text-center md:text-left">
+          <h1 class="text-3xl font-bold text-gray-800" id="userName">Loading...</h1>
+          <p class="text-gray-600 mt-1" id="userMeta">
+            <i class="fas fa-map-marker-alt mr-1"></i> Loading... 
+            <span class="mx-2">•</span> 
+            Member since <span class="font-medium">Loading...</span>
+          </p>
+          
+          <p class="text-gray-700 mt-3 max-w-lg" id="userBio">
+            Loading bio...
+          </p>
+          
+          
+          <!-- Social Links will be inserted here by JavaScript -->
+          
+          <!-- Stats -->
+          <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-4">
+            <div class="text-center">
+              <span class="block text-2xl font-bold text-orange-600" id="recipeCount">0</span>
+              <span class="text-sm text-gray-500">Recipes</span>
+            </div>
+            <div class="text-center">
+              <span class="block text-2xl font-bold text-orange-600" id="followerCount">0</span>
+              <span class="text-sm text-gray-500">Followers</span>
+            </div>
+            <div class="text-center">
+              <span class="block text-2xl font-bold text-orange-600" id="followingCount">0</span>
+              <span class="text-sm text-gray-500">Following</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col space-y-2">
+          <button class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-full font-medium transition">
+            <i class="fas fa-plus mr-1"></i> Follow
+          </button>
+          <button class="border border-orange-500 text-orange-500 hover:bg-orange-50 px-6 py-2 rounded-full font-medium transition">
+            <i class="fas fa-envelope mr-1"></i> Message
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Tabs -->
+    <div class="border-b border-gray-200 mb-6">
+      <nav class="flex space-x-8">
+        <button class="px-1 py-3 text-orange-600 font-medium border-b-2 border-orange-600">
+          <i class="fas fa-book mr-2"></i> My Recipes
+        </button>
+        <button class="px-1 py-3 text-gray-500 hover:text-orange-500 font-medium">
+          <i class="fas fa-heart mr-2"></i> Saved
+        </button>
+        <button class="px-1 py-3 text-gray-500 hover:text-orange-500 font-medium">
+          <i class="fas fa-star mr-2"></i> Reviews
+        </button>
+        <button class="px-1 py-3 text-gray-500 hover:text-orange-500 font-medium">
+          <i class="fas fa-trophy mr-2"></i> Badges
+        </button>
+      </nav>
+    </div>
+    
+    <!-- Recipe Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="recipeGrid">
+      <!-- Recipes will be loaded here dynamically -->
+      <div class="text-center py-8">
+        <i class="fas fa-spinner fa-spin text-orange-500 text-2xl"></i>
+        <p class="mt-2 text-gray-600">Loading recipes...</p>
+      </div>
+    </div>
+    
+    <!-- View More Button -->
+    <div class="text-center mt-8">
+      <button class="border border-orange-500 text-orange-500 hover:bg-orange-50 px-6 py-2 rounded-full font-medium transition">
+        Load More Recipes
+      </button>
+    </div>
+  </div>
+  
+  <script type="module" src="../js/profile.js"></script>
+</body>
+</html>

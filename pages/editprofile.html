@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipy</title>
+  <link rel="shortcut icon" href="../img/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <a href="../index.html" class="text-2xl font-bold text-orange-500">Recipy</a>
+      <a href="../pages/profile.html" class="text-gray-600 hover:text-orange-500">
+        <i class="fas fa-arrow-left mr-1"></i> Back to Profile
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Form -->
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        <i class="fas fa-user-edit text-orange-500 mr-2"></i> Edit Profile
+      </h1>
+
+      <form id="profileForm">
+        <!-- Profile Picture -->
+        <div class="mb-6 flex flex-col items-center">
+          <div class="relative mb-4">
+            <img 
+              id="profileImage"
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" 
+              alt="Profile" 
+              class="w-32 h-32 rounded-full object-cover border-4 border-orange-200"
+            >
+            <button type="button" class="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+              <i class="fas fa-camera text-orange-500"></i>
+            </button>
+          </div>
+          <input type="file" class="hidden" id="avatar-upload" accept="image/*">
+          <button 
+            type="button" 
+            onclick="document.getElementById('avatar-upload').click()"
+            class="text-orange-500 hover:text-orange-700 text-sm font-medium"
+          >
+            Change Photo
+          </button>
+        </div>
+
+        <!-- Basic Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">First Name</label>
+            <input 
+              id="firstName"
+              type="text" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+            >
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Last Name</label>
+            <input 
+              id="lastName"
+              type="text" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+            >
+          </div>
+        </div>
+
+        <!-- Username -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Username</label>
+          <div class="relative">
+            <span class="absolute left-3 top-2 text-gray-400">@</span>
+            <input 
+              id="username"
+              type="text"  
+              class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+            >
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Bio</label>
+          <textarea 
+            id="bio"
+            placeholder="add your bio"
+            rows="3"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+          ></textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Location</label>
+          <input 
+            id="location"
+            type="text" 
+            value="London, UK" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
+          >
+        </div>
+
+        <!-- Social Links -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Social Links</label>
+          <div class="space-y-3">
+            <div class="flex items-center">
+              <span class="bg-gray-100 p-2 rounded-l-lg border border-r-0 border-gray-300 text-gray-500">
+                <i class="fab fa-instagram"></i>
+              </span>
+              <input 
+                id="instagram"
+                type="text" 
+                placeholder="Instagram" 
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-orange-500"
+              >
+            </div>
+            <div class="flex items-center">
+              <span class="bg-gray-100 p-2 rounded-l-lg border border-r-0 border-gray-300 text-gray-500">
+                <i class="fab fa-tiktok"></i>
+              </span>
+              <input 
+                id="tiktok"
+                type="text" 
+                placeholder="TikTok" 
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-orange-500"
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Privacy Settings</label>
+          <div class="space-y-2">
+            <label class="flex items-center">
+              <input id="privateRecipes" type="checkbox" checked class="rounded text-orange-500">
+              <span class="ml-2">Make saved recipes private</span>
+            </label>
+            <label class="flex items-center">
+              <input id="allowMessages" type="checkbox" class="rounded text-orange-500">
+              <span class="ml-2">Allow messages from other users</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
+          <button type="button" class="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50">
+            Cancel
+          </button>
+          <button type="submit" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">
+            <i class="fas fa-save mr-1"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+ 
+    <style>
+        :root {
+            --primary-orange: #FF8C42;
+            --secondary-blue: #4A9C6D;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333333;
+            --white: #ffffff;
+            --error-red: #e74c3c;
+            --success-green: #2ecc71;
+        }
+
+       
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+       
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            color: var(--primary-orange);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary-blue);
+        }
+
+        .account-settings {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            color: var(--secondary-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-orange);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-orange);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #e67300;
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .tab-btn {
+                border-bottom: 1px solid #eee;
+            }
+            
+            .tab-btn.active::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+  
+
+    <div class="container">
+        <div class="account-settings">
+            <h1 class="page-title">Account Settings</h1>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="password">Change Password</button>
+                <button class="tab-btn" data-tab="email">Change Email</button>
+            </div>
+            
+            <div id="password" class="tab-content active">
+                <form id="password-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" minlength="6" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Update Password</button>
+                    <div id="password-message" class="message"></div>
+                </form>
+            </div>
+            
+            <div id="email" class="tab-content">
+                <form id="email-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="current-password-email">Current Password</label>
+                        <input type="password" id="current-password-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-email">New Email Address</label>
+                        <input type="email" id="new-email" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Update Email</button>
+                    <div id="email-message" class="message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword, updateEmail } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfz_zUIpfOlE6dC-gNXRpUAxa8htAJukM",
+            authDomain: "recipe-app-ac623.firebaseapp.com",
+            projectId: "recipe-app-ac623",
+            storageBucket: "recipe-app-ac623.appspot.com",
+            messagingSenderId: "416865671762",
+            appId: "1:416865671762:web:4d69c1fe80161d3f8b5d8b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const passwordForm = document.getElementById('password-form');
+        const emailForm = document.getElementById('email-form');
+        const passwordMessage = document.getElementById('password-message');
+        const emailMessage = document.getElementById('email-message');
+
+        // Tab switching
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabBtns.forEach(tabBtn => tabBtn.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update active tab content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Password change form
+        passwordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Validate passwords match
+            if (newPassword !== confirmPassword) {
+                showMessage(passwordMessage, 'Passwords do not match', 'error');
+                return;
+            }
+            
+            // Validate password length
+            if (newPassword.length < 6) {
+                showMessage(passwordMessage, 'Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            const user = auth.currentUser;
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+            
+            try {
+                // Reauthenticate user
+                await reauthenticateWithCredential(user, credential);
+                
+                // Update password
+                await updatePassword(user, newPassword);
+                
+                showMessage(passwordMessage, 'Password updated successfully!', 'success');
+                passwordForm.reset();
+            } catch (error) {
+                console.error('Error updating password:', error);
+                showMessage(passwordMessage, getErrorMessage(error), 'error');
+            }
+        });
+
+        // Email change form
+        emailForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('current-password-email').value;
+            const newEmail = document.getElementById('new-email').value;
+            
+            const user = auth.currentUser;
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+            
+            try {
+                // Reauthenticate user
+                await reauthenticateWithCredential(user, credential);
+                
+                // Update email
+                await updateEmail(user, newEmail);
+                
+                showMessage(emailMessage, 'Email updated successfully!', 'success');
+                emailForm.reset();
+            } catch (error) {
+                console.error('Error updating email:', error);
+                showMessage(emailMessage, getErrorMessage(error), 'error');
+            }
+        });
+
+        // Helper functions
+        function showMessage(element, text, type) {
+            element.textContent = text;
+            element.className = `message ${type}`;
+        }
+
+        function getErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/wrong-password':
+                    return 'Incorrect current password';
+                case 'auth/email-already-in-use':
+                    return 'Email is already in use';
+                case 'auth/invalid-email':
+                    return 'Invalid email address';
+                case 'auth/weak-password':
+                    return 'Password is too weak';
+                case 'auth/requires-recent-login':
+                    return 'Please log in again to perform this action';
+                default:
+                    return 'An error occurred. Please try again.';
+            }
+        }
+    </script>
+
+    
+  <script type="module" src="../js/editprofile.js"></script>
+</body>
+</html>
